@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>JS: выполнение заданий</title>
+</head>
+<body>
+<p>Результаты выведены в консоль.</p>
+<script>
+/* Задания заключены в бло, чтобы имена переменных не конфликтовали*/
+
+/* Задание 1 (слайд 10): git; объявить две переменные двумя способами,
+   изменить одну, вывести значения одной и двумя командами console.log,
+   подписать шаги однострочными и многострочными комментариями.
+   Создана переменная a (let) и b (const). Значение меняется только у a,
+   так как const изменить нельзя.
+   Git (в терминале): git init, git add js_tasks.html, git commit -m "tasks" */
+{
+  // 1. Объявление двух переменных (однострочный комментарий)
+  let a = 5;
+  const b = 10;
+
+  /* 2. Вывод после объявления (многострочный комментарий) */
+  console.log(a, b); // одной командой
+  console.log(a); // двумя командами
+  console.log(b);
+
+  // 3. Изменение значения у a
+  a = 7;
+
+  /* 4. Вывод после изменения */
+  console.log(a, b); // одной командой
+  console.log(a); // двумя командами
+  console.log(b);
+}
+
+
+/* Задание 2 (слайд 26): числа.
+   n1 - число с 10 нулями, n2 - число с 5 знаками после запятой (0.00001),
+   n3 - строка, преобразованная в число. Округляем 0.3 и 0.6 тремя
+   способами. NaN не равен даже самому себе, поэтому результат false. */
+{
+  let n1 = 1e10; // 10000000000
+  console.log(n1);
+
+  let n2 = 1e-5; // 0,00001
+  console.log(n2);
+
+  let n3 = Number("123"); // строка "123" -> число 123
+  console.log(n3);
+
+  console.log(Math.floor(0.3), Math.floor(0.6)); // в меньшую: 0 0
+  console.log(Math.ceil(0.3), Math.ceil(0.6)); // в большую: 1 1
+  console.log(Math.round(0.3), Math.round(0.6)); // к ближайшему: 0 1
+
+  console.log(NaN == NaN); // false
+}
+
+
+/* Задание 3 (слайд 44): строки.
+   1) s1 переводится в нижний регистр методом toLowerCase().
+   2) s2 - строка из прописных букв; первый символ оставляем заглавным,
+      остальные делаем строчными (slice(1) - всё, кроме первого символа).
+   3) truncate(str, maxlength): если строка длиннее maxlength, берём первые
+      maxlength - 1 символов и добавляем "…", итоговая длина = maxlength. */
+{
+  let s1 = "JAVASCRIPT".toLowerCase();
+  console.log(s1); // javascript
+
+  let s2 = "HELLO";
+  s2 = s2[0].toUpperCase() + s2.slice(1).toLowerCase();
+  console.log(s2); // Hello
+
+  function truncate(str, maxlength) {
+    if (str.length > maxlength) {
+      return str.slice(0, maxlength - 1) + "…";
+    }
+    return str;
+  }
+  console.log(truncate("Вот, что мне хотелось бы сказать", 20));
+  console.log(truncate("Привет!", 20)); // без изменений
+}
+
+
+/* Задание 4 (слайд 63): объекты.
+   Создан объект user, к нему по шагам добавляются/меняются/удаляются
+   свойства. Функция isEmpty(obj) возвращает false, если в объекте есть
+   хоть одно свойство (цикл for..in выполнился), иначе true. */
+{
+  let user = {}; // 1. пустой объект
+  user.name = "Harry"; // 2. добавили name
+  user.surname = "Potter"; // 3. добавили surname
+  user.name = "Garry"; // 4. изменили name
+  delete user.name; // 5. удалили name
+  console.log(user); // { surname: "Potter" }
+
+  function isEmpty(obj) {
+    for (let key in obj) {
+      return false;
+    }
+    return true;
+  }
+  console.log(isEmpty({})); // true
+  console.log(isEmpty(user)); // false
+}
+
+
+/* Задание 5 (слайды 84–85): чему равны a, b, c, d?
+   ++a сначала увеличивает a и возвращает новое значение (c = 2),
+   b++ возвращает старое значение (d = 1), а затем увеличивает b.
+   Ответ: a = 2, b = 2, c = 2, d = 1. */
+{
+  let a = 1, b = 1;
+  let c = ++a;
+  let d = b++;
+  console.log(a, b, c, d);
+}
+
+
+/* Задание 6 (слайды 86–87): чему равны a и x?
+   a *= 2 - то же, что a = a * 2, и возвращает 4, поэтому x = 1 + 4.
+   Ответ: a = 4, x = 5. */
+{
+  let a = 2;
+  let x = 1 + (a *= 2);
+  console.log(a, x);
+}
+
+
+/* Задание 7 (слайды 88–89): результат 14 выражений.
+   Бинарный + со строкой склеивает строки, остальные операторы
+   (-, *, /) приводят значения к числу. */
+{
+  console.log("" + 1 + 0); // "10"
+  console.log("" - 1 + 0); // -1
+  console.log(true + false);// 1
+  console.log(6 / "3"); // 2
+  console.log("2" * "3"); // 6
+  console.log(4 + 5 + "px"); // "9px"
+  console.log("$" + 4 + 5); // "$45"
+  console.log("4" - 2);  // 2
+  console.log("4px" - 2); // NaN
+  console.log(" -9 " + 5); // " -9 5"
+  console.log(" -9 " - 5); // -14
+  console.log(null + 1);  // 1
+  console.log(undefined + 1);  // NaN
+  console.log(" \t \n" - 2);   // -2
+}
+
+
+/* Задание 8 (слайды 100–101): результат сравнений.
+   Строки сравниваются посимвольно, разные типы приводятся к числу,
+   === сравнивает без приведения типов, null == undefined (особое правило). */
+{
+  console.log(5 > 4);                  // true
+  console.log("ананас" > "яблоко");    // false
+  console.log("2" > "12");             // true
+  console.log(undefined == null);      // true
+  console.log(undefined === null);     // false
+  console.log(null == "\n0\n");        // false
+  console.log(null === +"\n0\n");      // false
+}
+
+
+/* Задание 9 (слайд 107): что выведет код.
+   || возвращает первое истинное значение, && - первое ложное.
+   console.log возвращает undefined, как и alert, поэтому здесь он
+   заменяет alert, чтобы не открывались окна. */
+{
+  console.log(null || 2 || undefined); // 2
+  console.log(console.log(1) || 2 || console.log(3)); // 1, затем 2 (третий вызов не выполнится)
+  console.log(1 && null && 2); // null
+}
+
+
+/* Задание 10 (слайд 108): условия if для переменной age.
+   Первое условие - age от 14 до 90 включительно (оба условия через &&).
+   Второе - age НЕ в этом диапазоне (!(...)). */
+{
+  let age = 30;
+  if (age >= 14 && age <= 90) {
+    console.log("age в диапазоне 14–90");
+  }
+  if (!(age >= 14 && age <= 90)) {
+    console.log("age вне диапазона 14–90");
+  }
+}
+</script>
+</body>
+</html>
