@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Товары</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #ecafc4; }
+
+  /*Задание: создать страницу с flex-контейнером, получить список товаров
+   GET-запросом на http://localhost:10800/api/products и вставить товары
+   во flex-контейнер с помощью цикла.*/
+
+  /*Flex-контейнер */
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /*Карточка товара, flex-элемент */
+  .product {
+    flex: 1 1 240px;
+    max-width: 320px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px;
+  }
+  .product img { width: 100%; height: 180px; object-fit: contain; }
+  .product h3 { margin: 8px 0; }
+  .product p { margin: 4px 0; }
+  .category { color: #666; font-size: 14px; }
+  .price { font-weight: bold; font-size: 18px; }
+</style>
+</head>
+<body>
+
+<h1>Список товаров</h1>
+<div id="status">Загрузка...</div>
+<div class="products" id="products"></div>
+
+<script>
+
+/* Контейнер — div#products (display:flex в CSS). Функция loadProducts()
+   получает массив товаров, цикл for..of создаёт карточку на каждый товар
+   (картинка, название, категория, описание, цена). */
+
+const container = document.getElementById('products');
+const status = document.getElementById('status');
+
+async function loadProducts() {
+  try {
+    //GET-запрос
+    const response = await fetch('http://localhost:10800/api/products');
+    if (!response.ok) {
+      throw new Error('Ошибка сервера: ' + response.status);
+    }
+
+    //JSON-массив товаров
+    const products = await response.json();
+    status.textContent = 'Найдено товаров: ' + products.length;
+
+    //цикл: для каждого товара создаем карточку и вставляем в контейнер
+    for (const product of products) {
+      const card = document.createElement('div');
+      card.className = 'product';
+
+      //Установила главную картинку (main: true), если такой нет - первую в списке
+      const mainImage = product.images.find(img => img.main) || product.images[0];
+      if (mainImage) {
+        const img = document.createElement('img');
+        img.src = mainImage.imageUrl;
+        img.alt = product.name;
+        card.appendChild(img);
+      }
+
+      const title = document.createElement('h3');
+      title.textContent = product.name;
+      card.appendChild(title);
+
+      const category = document.createElement('p');
+      category.className = 'category';
+      category.textContent = product.category.name;
+      card.appendChild(category);
+
+      const description = document.createElement('p');
+      description.textContent = product.description;
+      card.appendChild(description);
+
+      const price = document.createElement('p');
+      price.className = 'price';
+      price.textContent = 'Цена: ' + product.price;
+      card.appendChild(price);
+
+      container.appendChild(card);
+    }
+  } catch (error) {
+    status.textContent = 'Не удалось загрузить товары: ' + error.message;
+  }
+}
+
+loadProducts();
+</script>
+</body>
+</html>
